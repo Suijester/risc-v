@@ -1,7 +1,7 @@
 `ifndef ENUMTYPES_H
 `define ENUMTYPES_H
 
-typedef enum {
+typedef enum logic [3:0] {
     addALU = 4'b0000,
     subALU = 4'b0001,
     xorALU = 4'b0010,
@@ -17,7 +17,7 @@ typedef enum {
 } ALU_operation_t;
 
 
-typedef enum {
+typedef enum logic [6:0] {
     rTypeInstruction = 7'b0110011,
     iTypeInstruction = 7'b0010011,
     iTypeInstruction_LOAD = 7'b0000011,

@@ -42,6 +42,9 @@ logic [31:0] branchAddress_EX; // calculated in execute stage
 logic [31:0] branchAddress_MEM;
 logic takeBranch_MEM; // condition checked in memory stage
 
+logic pcStallCache;
+logic ifidCacheClear;
+
 logic [31:0] instructionCode_IF;
 
 assign pcPlusFour_IF = pcAddress_IF + 4;
@@ -51,14 +54,75 @@ programCounter pcUnit (
     .clk(clk),
     .reset(reset),
     .nextPC(nextPC_IF),
-    .pcEnable(pcEnable),
+    .pcEnable(pcEnable & ~pcStallCache),
     .pcAddress(pcAddress_IF)
 );
 
-instructionMemory instructionUnit (
-    .PC(pcAddress_IF),
-    .instruction(instructionCode_IF)
+logic writeCache_IF;
+logic [3:0] writeIndex_IF;
+logic [24:0] writeTag_IF;
+logic [63:0] writeData_IF;
+
+logic cacheHit_IF;
+logic [31:0] cacheInstructionCode_IF;
+
+l1Cache cacheUnit (
+    .clk(clk),
+    .reset(reset),
+
+    .pcAddress(pcAddress_IF),
+    .writeCache(writeCache_IF),
+    .writeIndex(writeIndex_IF),
+    .writeTag(writeTag_IF),
+    .writeData(writeData_IF),
+
+    .cacheHit(cacheHit_IF),
+    .instructionCode(cacheInstructionCode_IF);
 );
+
+logic [31:0] fetchedInstructionCode;
+logic instructionRequest;
+logic [31:0] instructionAddress;
+logic receivedInstruction;
+logic [63:0] cacheData;
+
+cacheController cacheControl (
+    .clk(clk),
+    .reset(reset),
+    .cacheHit(cacheHit_IF),
+    .pcAddress(pcAddress_IF),
+    .fetchedData(cacheData)
+    .pcStallCache(pcStallCache),
+    .ifidCacheClear(ifidCacheClear),
+    .writeIndex(writeIndex_IF),
+    .writeTag(writeTag_IF),
+    .instructionRequest(instructionRequest),
+    .writeData(writeData_IF),
+
+    .instructionAddress(instructionAddress),
+    .receivedInstruction(receivedInstruction),
+    .writeCache(writeCache_IF)
+);
+
+instructionMemory instructionUnit (
+    .clk(clk),
+    .reset(reset),
+    .passedPC(instructionAddress),
+    .instructionRequest(instructionRequest),
+    .instruction(fetchedInstructionCode),
+    .cacheData(cacheData),
+    .receivedInstruction(receivedInstruction)
+);
+
+always_comb begin
+    if (cacheHit_IF) begin
+        instructionCode_IF = cacheInstructionCode_IF;
+    end else if (receivedInstruction) begin
+        instructionCode_IF = fetchedInstructionCode;
+    end else begin
+        instructionCode_IF = 32'h00000033;
+    end
+end
 
 // IF/ID Register
 logic [31:0] pcAddress_ID;
@@ -69,7 +133,7 @@ ifidRegister ifidUnit (
     .clk(clk),
     .reset(reset),
     .ifidEnable(ifidEnable),
-    .ifidClear(ifidClear),
+    .ifidClear(ifidClear | ifidCacheClear),
     
     .pcAddress_IF(pcAddress_IF),
     .instructionCode_IF(instructionCode_IF),
