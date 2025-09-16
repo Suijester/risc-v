@@ -44,8 +44,15 @@ memoryState currentState;
 memoryState nextState;
 
 always_ff @(posedge clk or negedge reset) begin
-    currentState <= (!reset) ? receivingState : nextState;
-    savedPCAddress <= (currentState == receivingState) ? passedPC : savedPCAddress;
+    if (!reset) begin
+        currentState <= passingState;
+        savedPCAddress <= 32'b0;
+    end else begin
+        currentState <= nextState;
+        if (currentState == receivingState) begin
+            savedPCAddress <= passedPC;
+        end
+    end
 end
 
 always_comb begin
@@ -68,7 +75,7 @@ always_comb begin
     endcase
 
 end
-/*
+
 initial begin
     instructionMem[0] = 32'h00500113;  // addi x2, x0, 5
     instructionMem[1] = 32'h00300193;  // addi x3, x0, 3
@@ -78,5 +85,5 @@ initial begin
     instructionMem[5] = 32'hfe510ee3;  // bne x2, x0, -4
     instructionMem[6] = 32'h005002b3;  // add x5, x1, x0
 end
-*/
+
 endmodule
