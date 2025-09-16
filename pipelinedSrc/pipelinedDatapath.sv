@@ -77,7 +77,7 @@ l1Cache cacheUnit (
     .writeData(writeData_IF),
 
     .cacheHit(cacheHit_IF),
-    .instructionCode(cacheInstructionCode_IF);
+    .instructionCode(cacheInstructionCode_IF)
 );
 
 logic [31:0] fetchedInstructionCode;
@@ -91,7 +91,7 @@ cacheController cacheControl (
     .reset(reset),
     .cacheHit(cacheHit_IF),
     .pcAddress(pcAddress_IF),
-    .fetchedData(cacheData)
+    .fetchedData(cacheData),
     .pcStallCache(pcStallCache),
     .ifidCacheClear(ifidCacheClear),
     .writeIndex(writeIndex_IF),
@@ -133,7 +133,7 @@ ifidRegister ifidUnit (
     .clk(clk),
     .reset(reset),
     .ifidEnable(ifidEnable),
-    .ifidClear(ifidClear | ifidCacheClear),
+    .ifidClear(ifidClear | (ifidCacheClear & ifidEnable)),
     
     .pcAddress_IF(pcAddress_IF),
     .instructionCode_IF(instructionCode_IF),

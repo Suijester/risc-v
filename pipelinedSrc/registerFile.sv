@@ -35,8 +35,23 @@ module registerFile(
 
 logic [31:0] registers [0:31];
 
-assign r1Data = (r1Address == 0) ? 32'b0 : registers[r1Address];
-assign r2Data = (r2Address == 0) ? 32'b0 : registers[r2Address];
+always_comb begin
+    if (r1Address == 0) begin
+        r1Data = 0;
+    end else if (writeRegister && r1Address == writeAddress) begin
+        r1Data = writeData;
+    end else begin
+        r1Data = registers[r1Address];
+    end
+    
+    if (r2Address == 0) begin
+        r2Data = 0;
+    end else if (writeRegister && r2Address == writeAddress) begin
+        r2Data = writeData;
+    end else begin
+        r2Data = registers[r2Address];
+    end
+end
 
 always_ff @(posedge clk or negedge reset) begin
     if (!reset) begin

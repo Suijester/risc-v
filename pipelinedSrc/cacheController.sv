@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module cacheController (
     input logic clk,
     input logic reset,
@@ -31,8 +32,15 @@ cacheState nextState;
 cacheState currentState;
 
 always_ff @(posedge clk or negedge reset) begin
-    currentState <= (!reset) ? initialState : nextState; // state advancement sequentially
-    savedPCAddress <= (currentState == initialState) ? pcAddress : savedPCAddress;
+    if (!reset) begin
+        currentState <= initialState;
+        savedPCAddress <= 32'b0;
+    end else begin
+        currentState <= nextState;
+        if (currentState == initialState && ~cacheHit) begin
+            savedPCAddress <= pcAddress;
+        end
+    end
 end
 
 always_comb begin
@@ -48,7 +56,7 @@ always_comb begin
     writeTag = 0;
     instructionAddress = 0;
 
-    unique case (currentState) begin
+    unique case (currentState)
         initialState: begin
             nextState = (~cacheHit) ? waitForInstruction : initialState;
             pcStallCache = ~cacheHit;
@@ -64,16 +72,17 @@ always_comb begin
                 writeTag = savedPCAddress[31:7];
                 writeCache = 1;
                 nextState = initialState;
-
-                pcStallCache = 1;
             end else begin
                 nextState = waitForInstruction;
                 pcStallCache = 1;
                 ifidCacheClear = 1;
+                instructionAddress = savedPCAddress;
                 instructionRequest = 1;
             end
         end
     endcase
 end
+
+endmodule
 
 

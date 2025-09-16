@@ -22,16 +22,6 @@
 module instructionMemory #(
     parameter memorySize = 64
 )(
-<<<<<<< HEAD
-    input logic [31:0] PC,
-    output logic [31:0] instruction
-);
-
-logic [31:0] instructionMem [0:memorySize - 1];
-
-
-assign instruction = instructionMem[PC[31:2]];
-=======
     input logic clk,
     input logic reset,
     input logic [31:0] passedPC, // from cache controller
@@ -64,7 +54,7 @@ always_comb begin
     cacheData = 64'b0;
     receivedInstruction = 0;
 
-    unique case (currentState) begin
+    unique case (currentState)
         receivingState: begin
             nextState = instructionRequest ? passingState : receivingState;
         end
@@ -78,21 +68,15 @@ always_comb begin
     endcase
 
 end
->>>>>>> temp-local
-
+/*
 initial begin
     instructionMem[0] = 32'h00500113;  // addi x2, x0, 5
     instructionMem[1] = 32'h00300193;  // addi x3, x0, 3
     instructionMem[2] = 32'h003100b3;  // add x1, x2, x3
     instructionMem[3] = 32'h40310133;  // sub x2, x2, x3
     instructionMem[4] = 32'h00108093;  // addi x1, x1, 1
-<<<<<<< HEAD
-    instructionMem[5] = 32'hfe510ee3;  // bne x2, x0, -4 (loop back)
-    instructionMem[6] = 32'h005002b3;  // add x5, x1, x0 (store result in x5)
-=======
     instructionMem[5] = 32'hfe510ee3;  // bne x2, x0, -4
     instructionMem[6] = 32'h005002b3;  // add x5, x1, x0
->>>>>>> temp-local
 end
-
+*/
 endmodule

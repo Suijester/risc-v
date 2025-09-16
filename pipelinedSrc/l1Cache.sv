@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module l1Cache (
     input logic clk,
     input logic reset,
@@ -21,12 +22,11 @@ logic [2:0] cacheOffset; // clog2(cache line in bytes) = 3, need 3 bits to repre
 logic [3:0] cacheIndex; // clog2(cache blocks) = 4, need 4 bits to represent 16 blocks
 logic [24:0] cacheTag; // remainder of bits in address can be tag bits
 
-assign cacheOffset = pcAddress[2:0];
 assign cacheIndex = pcAddress[6:3];
 assign cacheTag = pcAddress[31:7];
 
-assign cacheHit = (cacheBitmap[cacheIndex] & cacheTagStorage[cacheIndex] == cacheTag);
-assign instructionCode = (cacheOffset[2] ? cacheMemory[cacheIndex][63:32] : cacheMemory[cacheIndex][31:0]);
+assign cacheHit = cacheBitmap[cacheIndex] & (cacheTagStorage[cacheIndex] == cacheTag);
+assign instructionCode = (pcAddress[2]) ?  cacheMemory[cacheIndex][31:0] : cacheMemory[cacheIndex][63:32];
 
 always_ff @(posedge clk or negedge reset) begin
     if (!reset) begin
