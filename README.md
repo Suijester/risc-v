@@ -1,5 +1,5 @@
 # Pipelined RISC-V with L1 Cache and Forwarding
-**Achieved 100 MHz clock speed with 0.5ns of positive slack. <br> Met all power and timing constraints with <10% resource usage.**
+**Achieved 100 MHz clock speed with 0.477ns of positive slack, with increased throughput from L1 Cache. <br> Powerful but lightweight implementation RV32I, using 2.01% LUT and 0.96% FF.**
 
 Synthesizable RV32I soft-core processor implemented in SystemVerilog, designed to maximize throughput and minimize latency using a five-stage pipeline and L1 instruction cache. Features instruction and data memory synthesizable to BRAM, with single-port read & write for lightweight operations. Handles hazards through a robust hazard detection unit, utilizing data forwarding and static branch-not-taken prediction.
 
@@ -10,6 +10,25 @@ Synthesizable RV32I soft-core processor implemented in SystemVerilog, designed t
 - Register Forwarding
 - L1 Instruction Cache
 - Static Branch Prediction
+
+## Benchmarking
+All benchmarks are evaluated on Xilinx Artix-7 xc7a100tcsg324-1.
+### Timing & Power
+| Metric | Value |
+| :--- | :--- |
+| Estimated Max Frequency | 105 MHz |
+| Target Clock Frequency | 100 MHz |
+| Worst Negative Slack (WNS) | +0.477 ns |
+| Total On-Chip Power | 0.118 W |
+
+### Resource Utilization
+| Resource | Utilization | Available | Percentage |
+| :--- | :--- | :--- | :--- |
+| LUT | 1275 | 63400 | 2.01% |
+| LUTRAM | 128 | 19000 | 0.67% |
+| Flip-Flop (FF) | 1215 | 126800 | 0.96% |
+| IO | 10 | 210 | 4.76% |
+| BUFG | 2 | 32 | 6.25% |
 
 ## Pipelining
 ### Instruction Fetch Stage
