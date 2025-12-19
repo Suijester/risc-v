@@ -105,6 +105,7 @@ always_comb begin
             reg_write = 1;
             alu_src_imm = 1;
             alu_src_pc = 1;
+            alu_op = 2'b00;
         end
 
         default: ;

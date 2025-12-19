@@ -13,7 +13,6 @@ typedef enum logic [3:0] {
     sltALU = 4'b1000,
     sltuALU = 4'b1001,
     luiALU = 4'b1010,
-    auipcALU = 4'b1011,
 
     noALU = 4'b1111
 } ALU_operation_t;

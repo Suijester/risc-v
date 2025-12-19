@@ -66,11 +66,11 @@ always_comb begin
             end
 
             7'b0110111: begin // U-Type LUI Instruction
-                alu_operation = luiALU;
+                alu_operation = luiALU; // special op that forwards imm for simplicity
             end
 
             7'b0010111: begin // U-Type AUIPC Instruction
-                alu_operation = auipcALU;
+                alu_operation = addALU; // should automatically be add via alu_op control signal
             end
 
             default: ;
