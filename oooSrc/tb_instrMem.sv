@@ -63,25 +63,25 @@ initial begin
         else $fatal(1, "Instruction block did not meet expectation!");
 
     // check edge cases
-    pc_addr = (128 << 2);
+    pc_addr = (MEM_SIZE << 2);
     #1;
     assert(instruction_blk === expected_instr_blk(pc_addr))
-        else $fatal(1, "Edge case pc_addr = 128 block did not meet expectation!");
+        else $fatal(1, "Edge case pc_addr = %d block did not meet expectation!", MEM_SIZE);
 
-    pc_addr = (127 << 2);
+    pc_addr = ((MEM_SIZE - 1) << 2);
     #1;
     assert(instruction_blk === expected_instr_blk(pc_addr))
-        else $fatal(1, "Edge case pc_addr = 127 block did not meet expectation!");
+        else $fatal(1, "Edge case pc_addr = %d block did not meet expectation!", (MEM_SIZE - 1));
 
-    pc_addr = (126 << 2);
+    pc_addr = ((MEM_SIZE - 2) << 2);
     #1;
     assert(instruction_blk === expected_instr_blk(pc_addr))
-        else $fatal(1, "Edge case pc_addr = 126 block did not meet expectation!");
+        else $fatal(1, "Edge case pc_addr = %d block did not meet expectation!" (MEM_SIZE - 2));
 
-    pc_addr = (125 << 2);
+    pc_addr = ((MEM_SIZE - 3) << 2);
     #1;
     assert(instruction_blk === expected_instr_blk(pc_addr))
-        else $fatal(1, "Edge case pc_addr = 125 block did not meet expectation!");
+        else $fatal(1, "Edge case pc_addr = %d block did not meet expectation!", (MEM_SIZE - 3));
 
     // random tests
     repeat (50) begin
