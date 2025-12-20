@@ -1,11 +1,12 @@
 module instructionMemory #(
     parameter CORE_WIDTH = 2,
-    parameter MEM_SIZE = 128 // instr count by default
+    parameter MEM_SIZE = 128, // instr count by default
+    localparam INSTR_BLK_SIZE = CORE_WIDTH * 32
 ) (
     /* verilator lint_off UNUSEDSIGNAL */
     input logic [31:0] pc_addr,
     /* verilator lint_on UNUSEDSIGNAL */
-    output logic [(CORE_WIDTH * 32)-1:0] instruction_blk
+    output logic [(INSTR_BLK_SIZE - 1):0] instruction_blk
 );
 
 logic [31:0] instr_mem [0:MEM_SIZE - 1] = '{default: 32'h00000013};

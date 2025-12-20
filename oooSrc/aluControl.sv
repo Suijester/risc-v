@@ -1,7 +1,9 @@
 `include "opTypes.svh"
 
 module aluControl (
+    /* verilator lint_off UNUSEDSIGNAL */
     input logic [31:0] insn,
+    /* verilator lint_on UNUSEDSIGNAL */
     input logic [1:0] alu_op,
 
     output ALU_operation_t alu_operation
@@ -16,7 +18,7 @@ assign funct3 = insn[14:12];
 always_comb begin
     alu_operation = noALU;
     if (alu_op != 2'b10) begin
-        alu_operation = {2'b0, alu_op};
+        alu_operation = ALU_operation_t'({2'b0, alu_op});
     end else begin
         unique case (opcode)
             7'b0110011: begin // R-Type Instruction

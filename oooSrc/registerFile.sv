@@ -12,7 +12,7 @@ module registerFile (
     input logic [31:0] reg_write_data
 );
 
-logic [31:0] register_mem [0:31] = '{default: 32'h0};
+logic [31:0] register_mem [0:31];
 
 assign rs1_data = (rs1 == 0) ? 32'h0 : register_mem[rs1];
 assign rs2_data = (rs2 == 0) ? 32'h0 : register_mem[rs2];
