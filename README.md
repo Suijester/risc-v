@@ -1,5 +1,5 @@
 # Pipelined RISC-V with L1 Cache and Forwarding
-**Achieved 100 MHz clock speed with 0.477ns of positive slack, with increased throughput from L1 Cache. <br> Powerful but lightweight implementation RV32I, using 2.01% LUT and 0.96% FF.**
+**Achieved 105 MHz clock speed with 0.477ns of positive slack, with increased throughput from L1 Cache. <br> Powerful but lightweight implementation RV32I, using 2.01% LUT and 0.96% FF.**
 
 Synthesizable RV32I soft-core processor implemented in SystemVerilog, designed to maximize throughput and minimize latency using a five-stage pipeline and L1 instruction cache. Features instruction and data memory synthesizable to BRAM, with single-port read & write for lightweight operations. Handles hazards through a robust hazard detection unit, utilizing data forwarding and static branch-not-taken prediction.
 
