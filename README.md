@@ -4,7 +4,8 @@
 Synthesizable RV32I soft-core processor implemented in SystemVerilog, designed to maximize throughput and minimize latency using a five-stage pipeline and L1 instruction cache. Features instruction and data memory synthesizable to BRAM, with single-port read & write for lightweight operations. Handles hazards through a robust hazard detection unit, utilizing data forwarding and static branch-not-taken prediction.
 
 ## Block Diagram (from Hennessy & Patterson)
-<img width="2118" height="992" alt="image" src="https://github.com/user-attachments/assets/d89fd4b4-70fe-4b67-bf95-cb8f468f2aed" />
+<img width="1858" height="1108" alt="image" src="https://github.com/user-attachments/assets/6220b8c2-e8f1-4a1b-9428-2aba8493381d" />
+
 
 
 ## Features
